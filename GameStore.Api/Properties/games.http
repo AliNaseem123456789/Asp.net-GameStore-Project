@@ -1,0 +1,14 @@
+Get http://localhost:5220/games
+
+Get http://localhost:5220/games/1
+
+POST http://localhost:5220/games
+Content-Type: application/json
+
+{
+  "name": "Minecraft",
+  "genreId": 2,
+  "price": 49.99,
+  "releaseDate": "2022-02-25"
+}
+

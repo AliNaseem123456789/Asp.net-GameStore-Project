@@ -1,0 +1,66 @@
+@* @{
+    ViewData["Title"] = "Add Game";
+}
+
+<h1>Add New Game</h1>
+
+<form id="gameForm">
+    <div>
+        <label for="name">Game Name:</label><br />
+        <input type="text" id="name" name="name" required />
+    </div>
+    <br />
+
+    <div>
+        <label for="genreId">Genre ID:</label><br />
+        <input type="number" id="genreId" name="genreId" required />
+    </div>
+    <br />
+
+    <div>
+        <label for="price">Price:</label><br />
+        <input type="number" id="price" name="price" step="0.01" required />
+    </div>
+    <br />
+
+    <div>
+        <label for="releaseDate">Release Date:</label><br />
+        <input type="date" id="releaseDate" name="releaseDate" required />
+    </div>
+    <br />
+
+    <button type="submit">Save Game</button>
+</form>
+
+<div id="message" style="margin-top:20px; color:green;"></div>
+
+<script>
+const form = document.getElementById("gameForm");
+const messageDiv = document.getElementById("message");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const newGame = {
+        name: document.getElementById("name").value,
+        genreId: parseInt(document.getElementById("genreId").value),
+        price: parseFloat(document.getElementById("price").value),
+        releaseDate: document.getElementById("releaseDate").value
+    };
+
+    const res = await fetch("/games", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newGame)
+    });
+
+    if (res.ok) {
+        messageDiv.style.color = "green";
+        messageDiv.textContent = "Game added successfully!";
+        form.reset();
+    } else {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = "Failed to add game.";
+    }
+});
+</script> *@

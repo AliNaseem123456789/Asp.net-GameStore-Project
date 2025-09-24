@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "User Authentication";
+}
+
+<h1>User Authentication</h1>
+
+<!-- Register Form -->
+<div id="registerSection" style="display:block; margin-top:20px;">
+    <h2>Register</h2>
+    <form id="registerForm">
+        <label>Username:ajldijlad</label><br />
+        <input type="text" id="regUsername" required /><br /><br />
+
+        <label>Email:</label><br />
+        <input type="email" id="regEmail" required /><br /><br />
+
+        <label>Password:</label><br />
+        <input type="password" id="regPassword" required /><br /><br />
+
+        <button type="submit">Register</button>
+    </form>
+    <p style="margin-top:10px;">
+        Already have an account? 
+        <a href="javascript:void(0)" onclick="showForm('login')">Login</a>
+    </p>
+</div>
+
+<!-- Login Form -->
+<div id="loginSection" style="display:none; margin-top:20px;">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label>Username:</label><br />
+        <input type="text" id="loginUsername" required /><br /><br />
+
+        <label>Email:</label><br />
+        <input type="email" id="loginEmail" required /><br /><br />
+
+        <label>Password:</label><br />
+        <input type="password" id="loginPassword" required /><br /><br />
+
+        <button type="submit">Login</button>
+    </form>
+    <p style="margin-top:10px;">
+        Don’t have an account? 
+        <a href="javascript:void(0)" onclick="showForm('register')">Register</a>
+    </p>
+</div>
+
+<div id="message" style="margin-top:20px;color:green;"></div>
+
+<script>
+const messageDiv = document.getElementById("message");
+
+function showForm(type) {
+    document.getElementById("registerSection").style.display = type === "register" ? "block" : "none";
+    document.getElementById("loginSection").style.display = type === "login" ? "block" : "none";
+}
+
+// Register form submit
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = {
+        Username: document.getElementById("regUsername").value,
+        Email: document.getElementById("regEmail").value,
+        Password: document.getElementById("regPassword").value
+    };
+
+    const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+    });
+
+    messageDiv.style.color = res.ok ? "green" : "red";
+    messageDiv.textContent = await res.text();
+    if (res.ok) document.getElementById("registerForm").reset();
+});
+
+// Login form submit
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = {
+        Username: document.getElementById("loginUsername").value,
+        Email: document.getElementById("loginEmail").value,
+        Password: document.getElementById("loginPassword").value
+    };
+
+    const res = await fetch("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user)
+    });
+
+    if (res.ok) {
+        // ✅ Redirect to Games API/page
+        window.location.href = "/games";  
+    } else {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = await res.text();
+    }
+});
+
+</script>
